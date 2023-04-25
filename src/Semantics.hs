@@ -26,8 +26,8 @@ stepAr (Var x, s) = do
     pure (Constant n ,s)
 stepAr (Op2 o e1 e2, s) = case e1 of
     (Constant _) -> do
-        (e2',_) <- step (e2, s)
+        (e2',_) <- stepAr (e2, s)
         pure  (Op2 o e1 e2' ,s)
     _            -> do
-        (e1',_) <- step (e1, s)
+        (e1',_) <- stepAr (e1, s)
         pure  (Op2 o e1' e2, s)
