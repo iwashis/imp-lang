@@ -1,17 +1,18 @@
 {-# LANGUAGE GADTs #-}
 module Semantics where
-
--- the purpose of this module is to define
--- small step semantics for our language Expr a.  
-
--- First we define Store which can be thought of as 
--- memory of stored values under variables that are
--- used in the languages.  
 import Language
 import Data.Map as Map
 
+-- Semantics
+-- The purpose of this module is to define
+-- small step semantics for our language Expr a.  
+
+
 type VariableName = String
 type Value = Int
+-- First we define Store which can be thought of as 
+-- memory of stored values under variables that are
+-- used in the languages.  
 type Store = Map VariableName Value
 
 -- in order to handle Store values we simply use standard Map datatype
@@ -31,3 +32,8 @@ stepAr (Op2 o e1 e2, s) = case e1 of
     _            -> do
         (e1',_) <- stepAr (e1, s)
         pure  (Op2 o e1' e2, s)
+
+
+-- TODO list : 
+-- 1. complete small-step semantics
+-- 2. write big-step semantics and compare the two approaches

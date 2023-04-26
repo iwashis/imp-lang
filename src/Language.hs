@@ -8,6 +8,7 @@ import Text.Parsec.String hiding (Parser)
 import Control.Applicative ((<|>), many)
 
 data BinOp = Add | Sub | Mul | Div deriving (Eq)
+
 instance Show BinOp where
     show :: BinOp -> String
     show Add = "+"
@@ -35,7 +36,7 @@ data Expr a where
 
 
 instance Show a => Show (Expr a) where
-    --show :: Show a => Expr a -> String
+    show :: Show a => Expr a -> String
     show (Var v) = v
     show (Constant c) = show c
     show (Op2 op e1 e2) = "(" ++ show e1 ++ " " ++ show op ++ " " ++ show e2 ++ ")"
@@ -64,5 +65,3 @@ instance Eq a => Eq (Expr a) where
     (While b1 c1) == (While b2 c2)               = b1 == b2 && c1 == c2
     _ == _                                       = False
 
-
---expr = SomeArithmetic $ Op2 Add (Var "x") (Constant 1)

@@ -6,7 +6,7 @@ cabal-version: 1.12
 
 name:           IMP
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/IMP#readme>
+description:    Please see the README on GitHub at <https://github.com/iwashis/IMP#readme>
 homepage:       https://github.com/iwashis/IMP#readme
 bug-reports:    https://github.com/iwashis/IMP/issues
 author:         Author Tomasz Brengos

@@ -2,7 +2,7 @@
 {-# LANGUAGE InstanceSigs #-}
 
 module Parser where
-
+-- TODO: fix imports. Perhaps use a formatter on the whole project
 import Language
 import Text.Parsec
     ( char,
@@ -22,6 +22,7 @@ import Control.Applicative ((<|>), many)
 
 
 type Parser = Parsec String ()
+
 data SomeExpr where
     SomeArithmetic :: Expr Arithmetic -> SomeExpr
     SomeBool       :: Expr Bool       -> SomeExpr
@@ -35,7 +36,7 @@ someExprParser = (SomeArithmetic <$> try parseArithmeticExpr)
 
 
 parseArithmeticExpr :: Parser (Expr Arithmetic)
-parseArithmeticExpr = do 
+parseArithmeticExpr = do
     spaces
     expr <- try parseConstant <|> try parseVar <|> try parseOp2
     spaces
@@ -46,18 +47,18 @@ parseBoolExpr = do
     spaces
     expr <- try parseT <|> try parseF <|> try parseLessOrEq
     spaces
-    return expr
+    pure expr
 
 parseCommExpr :: Parser (Expr Comm)
 parseCommExpr = do
     spaces
-    expr <- try parseSkip 
-        <|> try parseAssign 
-        <|> try parseAndThen 
-        <|> try parseIfElse 
+    expr <- try parseSkip
+        <|> try parseAssign
+        <|> try parseAndThen
+        <|> try parseIfElse
         <|> try parseWhile
     spaces
-    return expr
+    pure expr
 
 parseVar :: Parser (Expr Arithmetic)
 parseVar = Var <$> many1 lower
@@ -72,7 +73,7 @@ parseOp2 = do
     op <- parseBinOp
     e2 <- parseArithmeticExpr
     char ')'
-    return $ Op2 op e1 e2
+    pure $ Op2 op e1 e2
 
 parseBinOp :: Parser BinOp
 parseBinOp = do
@@ -80,10 +81,10 @@ parseBinOp = do
     op <- choice [char '+', char '-', char '*', char '/']
     spaces
     case op of
-        '+' -> return Add
-        '-' -> return Sub
-        '*' -> return Mul
-        '/' -> return Div
+        '+' -> pure Add
+        '-' -> pure Sub
+        '*' -> pure Mul
+        '/' -> pure Div
 
 parseT :: Parser (Expr Bool)
 parseT = string "T" *> pure T
@@ -98,7 +99,7 @@ parseLessOrEq = do
     spaces *> string "<=" <* spaces
     e2 <- parseArithmeticExpr
     char ')'
-    return $ LessOrEq e1 e2
+    pure $ LessOrEq e1 e2
 
 parseSkip :: Parser (Expr Comm)
 parseSkip = string "Skip" *> pure Skip
@@ -108,7 +109,7 @@ parseAssign = do
     v <- many1 letter
     spaces *> string ":=" <* spaces
     e <- parseArithmeticExpr
-    return $ Assign v e
+    pure $ Assign v e
 
 parseAndThen :: Parser (Expr Comm)
 parseAndThen = do
@@ -117,7 +118,7 @@ parseAndThen = do
     spaces *> char ';' <* spaces
     e2 <- parseCommExpr
     char ')'
-    return $ AndThen e1 e2
+    pure $ AndThen e1 e2
 
 parseIfElse :: Parser (Expr Comm)
 parseIfElse = do
@@ -131,7 +132,7 @@ parseIfElse = do
     e2 <- parseCommExpr
     spaces
     char ')'
-    return $ IfElse b e1 e2
+    pure $ IfElse b e1 e2
 
 parseWhile :: Parser (Expr Comm)
 parseWhile = do
@@ -144,10 +145,13 @@ parseWhile = do
     --char '('
     e <- parseCommExpr
     char ')'
-    return $ While b e
+    pure $ While b e
 
 parseExpr :: Parser a -> String -> Either ParseError a
-parseExpr p str = parse p "" str 
+parseExpr p = parse p ""
+
+-- TODO: move unit tests to future test suite
+testInput = "While (x <= 2) Do x := (x + 1)"
 
 testExpr :: Either ParseError SomeExpr
-testExpr = parseExpr someExprParser "While (x <= 2) Do x := (x + 1)"
+testExpr = parseExpr someExprParser testInput
