@@ -151,7 +151,8 @@ parseExpr :: Parser a -> String -> Either ParseError a
 parseExpr p = parse p ""
 
 -- TODO: move unit tests to future test suite
-testInput = "While (x <= 2) Do x := (x + 1)"
-
+testInput :: String
+testInput = "While (x <= 2) Do Skip"
+-- TODO: something is wrong with the testInput and is not parsed correctly
 testExpr :: Either ParseError SomeExpr
 testExpr = parseExpr someExprParser testInput

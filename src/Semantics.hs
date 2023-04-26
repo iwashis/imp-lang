@@ -2,6 +2,7 @@
 module Semantics where
 import Language
 import Data.Map as Map
+import Parser (SomeExpr (SomeArithmetic, SomeBool, SomeComm))
 
 -- Semantics
 -- The purpose of this module is to define
@@ -15,6 +16,8 @@ type Value = Int
 -- used in the languages.  
 type Store = Map VariableName Value
 
+emptyStore :: Store
+emptyStore = empty
 -- in order to handle Store values we simply use standard Map datatype
 -- interface.  
 
@@ -25,8 +28,9 @@ stepAr (Constant _, _) = Nothing
 stepAr (Var x, s) = do
     n <- Map.lookup x s
     pure (Constant n ,s)
-stepAr (Op2 o e1 e2, s) = case e1 of
-    (Constant _) -> do
+stepAr (Op2 o e1 e2, s) = case (e1,e2) of
+    (Constant m, Constant n) -> pure (Constant (m+n), s)
+    (Constant _, _) -> do
         (e2',_) <- stepAr (e2, s)
         pure  (Op2 o e1 e2' ,s)
     _            -> do
@@ -55,7 +59,7 @@ stepCommand (Assign x e, s) = case e of
     Constant n -> pure (Skip, Map.insert x n s )
     _          -> do
         (e',s') <- stepAr (e, s)
-        pure (Assign x e', s') 
+        pure (Assign x e', s')
 stepCommand (AndThen e1 e2, s) = case e1 of
     Skip  -> pure (e2,s)
     _     -> do
@@ -67,8 +71,18 @@ stepCommand (IfElse b e1 e2, s) = case b of
     _ -> do
         (b',s') <- stepBool (b, s)
         pure (IfElse b' e1 e2, s')
-stepCommand (While b e, s) = 
+stepCommand (While b e, s) =
     pure (IfElse b (AndThen e (While b e)) Skip,s)
 
+trace :: (SomeExpr, Store) -> [(SomeExpr, Store)]
+trace (SomeArithmetic e, s) = case stepAr (e,s) of
+    Nothing -> [(SomeArithmetic e,s)]
+    Just (e',s') -> (SomeArithmetic e,s) : trace (SomeArithmetic e',s')
+trace (SomeBool e, s) = case stepBool (e,s) of
+    Nothing -> [(SomeBool e,s)]
+    Just (e',s') -> (SomeBool e,s) : trace (SomeBool e',s')
+trace (SomeComm e, s ) = case stepCommand (e,s) of
+    Nothing -> [(SomeComm e,s)]
+    Just (e',s') -> (SomeComm e,s) : trace (SomeComm e',s')
 -- TODO list : 
 -- 2. write big-step semantics and compare the two approaches

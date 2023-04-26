@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE InstanceSigs #-}
 
-module Language (Expr(..), BinOp (..), Arithmetic (..), Comm(..)) where
+module Language (Expr(..), BinOp (..), Arithmetic (..), Comm(..),testExpr) where
 
 import Text.Parsec hiding ((<|>))
 import Text.Parsec.String hiding (Parser)
@@ -65,3 +65,7 @@ instance Eq a => Eq (Expr a) where
     (While b1 c1) == (While b2 c2)               = b1 == b2 && c1 == c2
     _ == _                                       = False
 
+testExpr :: Expr Comm
+testExpr = AndThen 
+    (Assign "x" (Constant 0)) 
+    (While (LessOrEq (Var "x") (Constant 3)) $ AndThen Skip (Assign "x" (Op2 Add (Var "x") (Constant 2))))
