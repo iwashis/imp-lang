@@ -10,3 +10,4 @@ main = do
     let e = SomeComm L.testExpr
     print e
     print $ trace (e,emptyStore)
+    print P.testExpr

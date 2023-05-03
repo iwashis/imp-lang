@@ -27,7 +27,12 @@ data SomeExpr where
     SomeArithmetic :: Expr Arithmetic -> SomeExpr
     SomeBool       :: Expr Bool       -> SomeExpr
     SomeComm       :: Expr Comm       -> SomeExpr
-    deriving Show
+
+instance Show SomeExpr where
+    show :: SomeExpr -> String
+    show (SomeArithmetic e) = show e
+    show (SomeBool e) = show e 
+    show (SomeComm e) = show e
 
 someExprParser :: Parser SomeExpr
 someExprParser = (SomeArithmetic <$> try parseArithmeticExpr)
@@ -136,7 +141,7 @@ parseIfElse = do
 
 parseWhile :: Parser (Expr Comm)
 parseWhile = do
-    char '('
+    -- char '('
     spaces
     string "While"
     spaces
@@ -144,7 +149,7 @@ parseWhile = do
     spaces *> string "Do" <* spaces
     --char '('
     e <- parseCommExpr
-    char ')'
+    --char ')'
     pure $ While b e
 
 parseExpr :: Parser a -> String -> Either ParseError a

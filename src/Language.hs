@@ -34,7 +34,11 @@ data Expr a where
     IfElse   :: Expr Bool   -> Expr Comm -> Expr Comm -> Expr Comm -- compo
     While    :: Expr Bool   -> Expr Comm -> Expr Comm -- compo
 
-
+-- 120 
+-- x
+-- x <= 10
+-- x <= y
+-- inst1 ; instr2 
 instance Show a => Show (Expr a) where
     show :: Show a => Expr a -> String
     show (Var v) = v
