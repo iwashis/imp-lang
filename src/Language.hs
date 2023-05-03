@@ -3,9 +3,10 @@
 
 module Language (Expr(..), BinOp (..), Arithmetic (..), Comm(..), SomeExpr (..), testExpr) where
 
-import Text.Parsec hiding ((<|>))
-import Text.Parsec.String hiding (Parser)
+--import Text.Parsec hiding ((<|>))
+--import Text.Parsec.String hiding (Parser)
 import Control.Applicative ((<|>), many)
+import Data.Typeable (Typeable, cast)
 
 data BinOp = Add | Sub | Mul | Div deriving (Eq)
 
@@ -84,3 +85,4 @@ instance Show SomeExpr where
     show (SomeArithmetic e) = show e
     show (SomeBool e) = show e 
     show (SomeComm e) = show e
+
