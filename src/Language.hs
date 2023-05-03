@@ -1,12 +1,12 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE RankNTypes #-}
 
-module Language (Expr(..), BinOp (..), Arithmetic (..), Comm(..), SomeExpr (..), testExpr) where
+module Language (Expr(..), BinOp (..), Arithmetic (..), Comm(..), SomeExpr (..), coerceSomeExpr, testExpr) where
 
---import Text.Parsec hiding ((<|>))
---import Text.Parsec.String hiding (Parser)
 import Control.Applicative ((<|>), many)
 import Data.Typeable (Typeable, cast)
+import Data.Maybe
 
 data BinOp = Add | Sub | Mul | Div deriving (Eq)
 
@@ -34,6 +34,7 @@ data Expr a where
     AndThen  :: Expr Comm   -> Expr Comm -> Expr Comm -- compo
     IfElse   :: Expr Bool   -> Expr Comm -> Expr Comm -> Expr Comm -- compo
     While    :: Expr Bool   -> Expr Comm -> Expr Comm -- compo
+    deriving (Typeable)
 
 -- 120 
 -- x
@@ -77,8 +78,16 @@ testExpr = AndThen
 
 data SomeExpr where
     SomeArithmetic :: Expr Arithmetic -> SomeExpr
-    SomeBool       :: Expr Bool       -> SomeExpr
-    SomeComm       :: Expr Comm       -> SomeExpr
+    SomeBool       :: Expr Bool -> SomeExpr
+    SomeComm       :: Expr Comm -> SomeExpr
+
+coerceMaybeSomeExpr :: forall a. Typeable a => SomeExpr -> Maybe (Expr a)
+coerceMaybeSomeExpr (SomeArithmetic e) = cast e
+coerceMaybeSomeExpr (SomeBool e)       = cast e
+coerceMaybeSomeExpr (SomeComm e)       = cast e
+
+coerceSomeExpr :: forall a . Typeable a => SomeExpr -> Expr a
+coerceSomeExpr = fromJust . coerceMaybeSomeExpr
 
 instance Show SomeExpr where
     show :: SomeExpr -> String

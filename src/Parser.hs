@@ -17,13 +17,13 @@ import Text.Parsec
       try,
       ParseError,
       Parsec )
-import Text.Parsec.String hiding (Parser)
 import Control.Applicative ((<|>), many)
-
+import Data.Typeable ( Typeable )
 
 type Parser = Parsec String ()
 
-
+exprParser :: Typeable a => Parser ( Expr a )
+exprParser = coerceSomeExpr <$> someExprParser
 
 someExprParser :: Parser SomeExpr
 someExprParser = (SomeArithmetic <$> try parseArithmeticExpr)
