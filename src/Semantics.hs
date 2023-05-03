@@ -2,7 +2,6 @@
 module Semantics where
 import Language
 import Data.Map as Map
-import Parser (SomeExpr (SomeArithmetic, SomeBool, SomeComm))
 
 -- Semantics
 -- The purpose of this module is to define

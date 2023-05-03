@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE InstanceSigs #-}
 
-module Language (Expr(..), BinOp (..), Arithmetic (..), Comm(..),testExpr) where
+module Language (Expr(..), BinOp (..), Arithmetic (..), Comm(..), SomeExpr (..), testExpr) where
 
 import Text.Parsec hiding ((<|>))
 import Text.Parsec.String hiding (Parser)
@@ -73,3 +73,14 @@ testExpr :: Expr Comm
 testExpr = AndThen 
     (Assign "x" (Constant 0)) 
     (While (LessOrEq (Var "x") (Constant 3)) $ AndThen Skip (Assign "x" (Op2 Add (Var "x") (Constant 2))))
+
+data SomeExpr where
+    SomeArithmetic :: Expr Arithmetic -> SomeExpr
+    SomeBool       :: Expr Bool       -> SomeExpr
+    SomeComm       :: Expr Comm       -> SomeExpr
+
+instance Show SomeExpr where
+    show :: SomeExpr -> String
+    show (SomeArithmetic e) = show e
+    show (SomeBool e) = show e 
+    show (SomeComm e) = show e

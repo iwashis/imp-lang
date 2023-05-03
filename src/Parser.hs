@@ -23,16 +23,7 @@ import Control.Applicative ((<|>), many)
 
 type Parser = Parsec String ()
 
-data SomeExpr where
-    SomeArithmetic :: Expr Arithmetic -> SomeExpr
-    SomeBool       :: Expr Bool       -> SomeExpr
-    SomeComm       :: Expr Comm       -> SomeExpr
 
-instance Show SomeExpr where
-    show :: SomeExpr -> String
-    show (SomeArithmetic e) = show e
-    show (SomeBool e) = show e 
-    show (SomeComm e) = show e
 
 someExprParser :: Parser SomeExpr
 someExprParser = (SomeArithmetic <$> try parseArithmeticExpr)
