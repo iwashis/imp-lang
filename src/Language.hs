@@ -2,7 +2,10 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Language (Expr (..), BinOp (..), Comm (..), SomeExpr (..), testExpr) where
+module Language (Expr (..), BinOp (..), SomeExpr (..), testExpr) where
+
+import Semantics.Store (Store)
+
 
 data BinOp = Add | Mul deriving (Eq)
 
@@ -14,8 +17,6 @@ instance Show BinOp where
     show Mul = "*"
 
 
-data Comm = Comm
-    deriving (Eq, Show)
 
 data Expr a where
     Var :: String -> Expr Int -- basic
@@ -24,11 +25,11 @@ data Expr a where
     T :: Expr Bool -- basic
     F :: Expr Bool -- basic
     LessOrEq :: Expr Int -> Expr Int -> Expr Bool -- compo
-    Skip :: Expr Comm -- basic
-    Assign :: String -> Expr Int -> Expr Comm -- basic
-    AndThen :: Expr Comm -> Expr Comm -> Expr Comm -- compo
-    IfElse :: Expr Bool -> Expr Comm -> Expr Comm -> Expr Comm -- compo
-    While :: Expr Bool -> Expr Comm -> Expr Comm -- compo
+    Skip :: Expr Store -- basic
+    Assign :: String -> Expr Int -> Expr Store -- basic
+    AndThen :: Expr Store -> Expr Store -> Expr Store -- compo
+    IfElse :: Expr Bool -> Expr Store -> Expr Store -> Expr Store -- compo
+    While :: Expr Bool -> Expr Store -> Expr Store -- compo
 
 -- 120
 -- x
@@ -72,7 +73,7 @@ instance Eq a => Eq (Expr a) where
     (While b1 c1) == (While b2 c2) = b1 == b2 && c1 == c2
     _ == _ = False
 
-testExpr :: Expr Comm
+testExpr :: Expr Store
 testExpr =
     AndThen
         (Assign "x" (Constant 0))
@@ -81,7 +82,7 @@ testExpr =
 data SomeExpr where
     SomeInt :: Expr Int -> SomeExpr
     SomeBool :: Expr Bool -> SomeExpr
-    SomeComm :: Expr Comm -> SomeExpr
+    SomeComm :: Expr Store -> SomeExpr
 
 instance Show SomeExpr where
     show :: SomeExpr -> String

@@ -4,7 +4,7 @@
 module Gen.Language where
 
 import Language
-
+import Semantics.Store
 import Test.QuickCheck
 
 -- Define a generator for Int expressions
@@ -28,7 +28,7 @@ genBoolExpr =
         ]
 
 -- Define a generator for Comm expressions
-genCommExpr :: Gen (Expr Comm)
+genCommExpr :: Gen (Expr Store)
 genCommExpr =
     oneof
         [ pure Skip -- generate a skip expression

@@ -48,7 +48,7 @@ stepBool (LessOrEq e1 e2, s) = case (e1, e2) of
         (e1', _) <- stepAr (e1, s)
         pure (LessOrEq e1' e2, s)
 
-stepCommand :: (Expr Comm, Store) -> Maybe (Expr Comm, Store)
+stepCommand :: (Expr Store, Store) -> Maybe (Expr Store, Store)
 stepCommand (Skip, _) = Nothing
 stepCommand (Assign x e, s) = case e of
     Constant n -> pure (Skip, Map.insert x n s)

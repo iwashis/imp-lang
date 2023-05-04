@@ -1,5 +1,4 @@
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE InstanceSigs #-}
 
 module Parser where
 
@@ -7,6 +6,7 @@ module Parser where
 
 import Control.Applicative (many, (<|>))
 import Language
+import Semantics.Store
 import Text.Parsec (
     ParseError,
     Parsec,
@@ -44,7 +44,7 @@ parseBoolExpr = do
     spaces
     pure expr
 
-parseCommExpr :: Parser (Expr Comm)
+parseCommExpr :: Parser (Expr Store)
 parseCommExpr = do
     spaces
     expr <-
@@ -96,17 +96,17 @@ parseLessOrEq = do
     char ')'
     pure $ LessOrEq e1 e2
 
-parseSkip :: Parser (Expr Comm)
+parseSkip :: Parser (Expr Store)
 parseSkip = string "Skip" *> pure Skip
 
-parseAssign :: Parser (Expr Comm)
+parseAssign :: Parser (Expr Store)
 parseAssign = do
     v <- many1 letter
     spaces *> string ":=" <* spaces
     e <- parseIntExpr
     pure $ Assign v e
 
-parseAndThen :: Parser (Expr Comm)
+parseAndThen :: Parser (Expr Store)
 parseAndThen = do
     char '('
     e1 <- parseCommExpr
@@ -115,7 +115,7 @@ parseAndThen = do
     char ')'
     pure $ AndThen e1 e2
 
-parseIfElse :: Parser (Expr Comm)
+parseIfElse :: Parser (Expr Store)
 parseIfElse = do
     char '('
     spaces
@@ -129,7 +129,7 @@ parseIfElse = do
     char ')'
     pure $ IfElse b e1 e2
 
-parseWhile :: Parser (Expr Comm)
+parseWhile :: Parser (Expr Store)
 parseWhile = do
     -- char '('
     spaces
