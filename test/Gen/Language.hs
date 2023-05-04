@@ -7,10 +7,10 @@ module Gen.Language where
 import Language
 
 import Test.QuickCheck
-import Data.Coerce
 import Data.Typeable hiding (TypeRep)
 
 instance Arbitrary BinOp where
+  arbitrary :: Gen BinOp
   arbitrary = elements [Add, Sub, Mul, Div]
 
 -- Define a generator for Arithmetic expressions
@@ -57,7 +57,7 @@ myTypeRep _ = case eqT :: Maybe (a :~: Arithmetic) of
             Nothing   -> error "Invalid type"
 
 -- Define a generator for Expr a
-genExpr :: forall a. (Typeable a, Arbitrary a) => Gen (Expr a)
+genExpr :: forall a. (Typeable a) => Gen (Expr a)
 genExpr = genExprWithRep (myTypeRep (Proxy :: Proxy a))
 
 -- Helper function to generate Expr a based on the type representative
