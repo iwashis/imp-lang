@@ -1,11 +1,13 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeApplications #-}
 
 module Semantics.SmallStep where
 
 import Data.Map as Map
 import Language
 import Semantics.Store
-
+import Data.Typeable
 
 -- Semantics
 -- The purpose of this module is to define
@@ -17,7 +19,7 @@ import Semantics.Store
 -- interface.
 
 -- small step semantics for Int expressions present
--- in our language:
+-- in our language for Expr Int, Expr Bool and Expr Store separately.
 stepAr :: (Expr Int, Store) -> Maybe (Expr Int, Store)
 stepAr (Constant _, _) = Nothing
 stepAr (Var x, s) = do
@@ -68,6 +70,8 @@ stepCommand (IfElse b e1 e2, s) = case b of
         pure (IfElse b' e1 e2, s')
 stepCommand (While b e, s) =
     pure (IfElse b (AndThen e (While b e)) Skip, s)
+
+
 
 trace :: (SomeExpr, Store) -> [(SomeExpr, Store)]
 trace (SomeInt e, s) = case stepAr (e, s) of
