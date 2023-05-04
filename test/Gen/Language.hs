@@ -7,16 +7,15 @@ import Language
 
 import Test.QuickCheck
 
-instance Arbitrary BinOp where
-  arbitrary = elements [Add, Sub, Mul, Div]
 
 -- Define a generator for Arithmetic expressions
 genArithmeticExpr :: Gen (Expr Arithmetic)
 genArithmeticExpr = oneof 
     [ Var <$> arbitrary -- generate a variable expression with a random string name
     , Constant <$> arbitrary -- generate a constant expression with a random integer value
-    , Op2 <$> arbitrary <*> genArithmeticExpr <*> genArithmeticExpr -- generate an arithmetic operation expression with two sub-expressions
+    , Op2 <$> genOp <*> genArithmeticExpr <*> genArithmeticExpr -- generate an arithmetic operation expression with two sub-expressions
     ]
+    where genOp = elements [Add, Sub, Mul, Div] 
 
 -- Define a generator for Boolean expressions
 genBoolExpr :: Gen (Expr Bool)
