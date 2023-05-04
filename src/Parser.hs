@@ -2,30 +2,33 @@
 {-# LANGUAGE InstanceSigs #-}
 
 module Parser where
+
 -- TODO: fix imports. Perhaps use a formatter on the whole project
+
+import Control.Applicative (many, (<|>))
 import Language
-import Text.Parsec
-    ( char,
-      digit,
-      letter,
-      lower,
-      spaces,
-      string,
-      choice,
-      many1,
-      parse,
-      try,
-      ParseError,
-      Parsec )
-import Control.Applicative ((<|>), many)
+import Text.Parsec (
+    ParseError,
+    Parsec,
+    char,
+    choice,
+    digit,
+    letter,
+    lower,
+    many1,
+    parse,
+    spaces,
+    string,
+    try,
+ )
 
 type Parser = Parsec String ()
 
 someExprParser :: Parser SomeExpr
-someExprParser = (SomeArithmetic <$> try parseArithmeticExpr)
-         <|> (SomeBool <$> try parseBoolExpr)
-         <|> (SomeComm <$> try parseCommExpr)
-
+someExprParser =
+    (SomeArithmetic <$> try parseArithmeticExpr)
+        <|> (SomeBool <$> try parseBoolExpr)
+        <|> (SomeComm <$> try parseCommExpr)
 
 parseArithmeticExpr :: Parser (Expr Arithmetic)
 parseArithmeticExpr = do
@@ -44,11 +47,12 @@ parseBoolExpr = do
 parseCommExpr :: Parser (Expr Comm)
 parseCommExpr = do
     spaces
-    expr <- try parseSkip
-        <|> try parseAssign
-        <|> try parseAndThen
-        <|> try parseIfElse
-        <|> try parseWhile
+    expr <-
+        try parseSkip
+            <|> try parseAssign
+            <|> try parseAndThen
+            <|> try parseIfElse
+            <|> try parseWhile
     spaces
     pure expr
 
@@ -134,9 +138,9 @@ parseWhile = do
     spaces
     b <- parseBoolExpr
     spaces *> string "Do" <* spaces
-    --char '('
+    -- char '('
     e <- parseCommExpr
-    --char ')'
+    -- char ')'
     pure $ While b e
 
 parseExpr :: Parser a -> String -> Either ParseError a
@@ -145,6 +149,7 @@ parseExpr p = parse p ""
 -- TODO: move unit tests to future test suite
 testInput :: String
 testInput = "While (x <= 2) Do Skip"
+
 -- TODO: something is wrong with the testInput and is not parsed correctly
 testExpr :: Either ParseError SomeExpr
 testExpr = parseExpr someExprParser testInput

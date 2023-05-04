@@ -1,0 +1,30 @@
+# This is a YAML file specifying a custom configuration for Fourmolu.
+
+version: 0.1
+
+steps: # Customize how each formatting step is run
+  - type: AggressiveSpaceRemoval # Remove redundant white space
+  - type: Parens # Add parentheses to some expressions
+    options:
+      application: True # Add parentheses to function application
+  - type: Lines # Split long lines
+    options:
+      lineLength: 80 # Limit line length to 80 characters
+      trailingWhitespace: Preserve # Preserve trailing white space
+  - type: GroupImports # Sort and group import statements
+    options:
+      modules:
+        - "Data.*"
+        - "Control.*"
+        - "System.*"
+        - "Prelude"
+        - "MyModule.*" # Group your own module's imports last
+
+options: # Customize overall formatting options
+  maxColumns: 80 # Limit line length to 80 characters
+  indent: 2 # Use two spaces for indentation
+  trailingWhitespace: Preserve # Preserve trailing white space
+  eol: LF # Use LF line endings
+  padModuleImports: True # Add padding to import statements
+  noSortImports: False # Sort import statements
+  singleLinePerTypeSynonym: False # Allow type synonyms on a single line
