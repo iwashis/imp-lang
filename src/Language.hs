@@ -2,7 +2,7 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Language (Expr (..), BinOp (..), Arithmetic (..), Comm (..), SomeExpr (..), testExpr) where
+module Language (Expr (..), BinOp (..), Comm (..), SomeExpr (..), testExpr) where
 
 data BinOp = Add | Mul deriving (Eq)
 
@@ -14,20 +14,18 @@ instance Show BinOp where
     show Mul = "*"
 
 
-data Arithmetic = Arithmetic
-    deriving (Eq, Show)
 data Comm = Comm
     deriving (Eq, Show)
 
 data Expr a where
-    Var :: String -> Expr Arithmetic -- basic
-    Constant :: Int -> Expr Arithmetic -- basic
-    Op2 :: BinOp -> Expr Arithmetic -> Expr Arithmetic -> Expr Arithmetic -- compo
+    Var :: String -> Expr Int -- basic
+    Constant :: Int -> Expr Int -- basic
+    Op2 :: BinOp -> Expr Int -> Expr Int -> Expr Int -- compo
     T :: Expr Bool -- basic
     F :: Expr Bool -- basic
-    LessOrEq :: Expr Arithmetic -> Expr Arithmetic -> Expr Bool -- compo
+    LessOrEq :: Expr Int -> Expr Int -> Expr Bool -- compo
     Skip :: Expr Comm -- basic
-    Assign :: String -> Expr Arithmetic -> Expr Comm -- basic
+    Assign :: String -> Expr Int -> Expr Comm -- basic
     AndThen :: Expr Comm -> Expr Comm -> Expr Comm -- compo
     IfElse :: Expr Bool -> Expr Comm -> Expr Comm -> Expr Comm -- compo
     While :: Expr Bool -> Expr Comm -> Expr Comm -- compo
@@ -81,12 +79,12 @@ testExpr =
         (While (LessOrEq (Var "x") (Constant 3)) $ AndThen Skip (Assign "x" (Op2 Add (Var "x") (Constant 2))))
 
 data SomeExpr where
-    SomeArithmetic :: Expr Arithmetic -> SomeExpr
+    SomeInt :: Expr Int -> SomeExpr
     SomeBool :: Expr Bool -> SomeExpr
     SomeComm :: Expr Comm -> SomeExpr
 
 instance Show SomeExpr where
     show :: SomeExpr -> String
-    show (SomeArithmetic e) = show e
+    show (SomeInt e) = show e
     show (SomeBool e) = show e
     show (SomeComm e) = show e

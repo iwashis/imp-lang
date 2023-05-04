@@ -16,9 +16,9 @@ import Semantics.Store
 -- in order to handle Store values we simply use standard Map datatype
 -- interface.
 
--- small step semantics for Arithmetic expressions present
+-- small step semantics for Int expressions present
 -- in our language:
-stepAr :: (Expr Arithmetic, Store) -> Maybe (Expr Arithmetic, Store)
+stepAr :: (Expr Int, Store) -> Maybe (Expr Int, Store)
 stepAr (Constant _, _) = Nothing
 stepAr (Var x, s) = do
     n <- Map.lookup x s
@@ -70,9 +70,9 @@ stepCommand (While b e, s) =
     pure (IfElse b (AndThen e (While b e)) Skip, s)
 
 trace :: (SomeExpr, Store) -> [(SomeExpr, Store)]
-trace (SomeArithmetic e, s) = case stepAr (e, s) of
-    Nothing -> [(SomeArithmetic e, s)]
-    Just (e', s') -> (SomeArithmetic e, s) : trace (SomeArithmetic e', s')
+trace (SomeInt e, s) = case stepAr (e, s) of
+    Nothing -> [(SomeInt e, s)]
+    Just (e', s') -> (SomeInt e, s) : trace (SomeInt e', s')
 trace (SomeBool e, s) = case stepBool (e, s) of
     Nothing -> [(SomeBool e, s)]
     Just (e', s') -> (SomeBool e, s) : trace (SomeBool e', s')

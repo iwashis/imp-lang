@@ -9,7 +9,7 @@ toFunction :: BinOp -> (Int -> Int -> Int)
 toFunction Add = (+)
 toFunction Mul = (*)
 
-stepAr :: (Expr Arithmetic, Store) -> Maybe Int
+stepAr :: (Expr Int, Store) -> Maybe Int
 stepAr (Constant i, _) = Just i
 stepAr (Var x, s) = Map.lookup x s
 stepAr (Op2 o e1 e2, s) = do

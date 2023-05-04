@@ -26,12 +26,12 @@ type Parser = Parsec String ()
 
 someExprParser :: Parser SomeExpr
 someExprParser =
-    (SomeArithmetic <$> try parseArithmeticExpr)
+    (SomeInt <$> try parseIntExpr)
         <|> (SomeBool <$> try parseBoolExpr)
         <|> (SomeComm <$> try parseCommExpr)
 
-parseArithmeticExpr :: Parser (Expr Arithmetic)
-parseArithmeticExpr = do
+parseIntExpr :: Parser (Expr Int)
+parseIntExpr = do
     spaces
     expr <- try parseConstant <|> try parseVar <|> try parseOp2
     spaces
@@ -56,18 +56,18 @@ parseCommExpr = do
     spaces
     pure expr
 
-parseVar :: Parser (Expr Arithmetic)
+parseVar :: Parser (Expr Int)
 parseVar = Var <$> many1 lower
 
-parseConstant :: Parser (Expr Arithmetic)
+parseConstant :: Parser (Expr Int)
 parseConstant = Constant . read <$> many1 digit
 
-parseOp2 :: Parser (Expr Arithmetic)
+parseOp2 :: Parser (Expr Int)
 parseOp2 = do
     char '('
-    e1 <- parseArithmeticExpr
+    e1 <- parseIntExpr
     op <- parseBinOp
-    e2 <- parseArithmeticExpr
+    e2 <- parseIntExpr
     char ')'
     pure $ Op2 op e1 e2
 
@@ -90,9 +90,9 @@ parseF = string "F" *> pure F
 parseLessOrEq :: Parser (Expr Bool)
 parseLessOrEq = do
     char '('
-    e1 <- parseArithmeticExpr
+    e1 <- parseIntExpr
     spaces *> string "<=" <* spaces
-    e2 <- parseArithmeticExpr
+    e2 <- parseIntExpr
     char ')'
     pure $ LessOrEq e1 e2
 
@@ -103,7 +103,7 @@ parseAssign :: Parser (Expr Comm)
 parseAssign = do
     v <- many1 letter
     spaces *> string ":=" <* spaces
-    e <- parseArithmeticExpr
+    e <- parseIntExpr
     pure $ Assign v e
 
 parseAndThen :: Parser (Expr Comm)
