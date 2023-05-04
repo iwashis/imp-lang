@@ -26,7 +26,7 @@ library
   exposed-modules:
       Language
       Parser
-      Semantics
+      Semantics.SmallStep
   other-modules:
       Paths_IMP
   hs-source-dirs:

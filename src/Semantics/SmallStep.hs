@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module Semantics where
+module Semantics.SmallStep where
 
 import Data.Map as Map
 import Language
