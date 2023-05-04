@@ -10,7 +10,6 @@ import Test.QuickCheck
 import Data.Typeable hiding (TypeRep)
 
 instance Arbitrary BinOp where
-  arbitrary :: Gen BinOp
   arbitrary = elements [Add, Sub, Mul, Div]
 
 -- Define a generator for Arithmetic expressions
