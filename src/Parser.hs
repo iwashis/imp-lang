@@ -78,9 +78,8 @@ parseBinOp = do
     spaces
     case op of
         '+' -> pure Add
-        '-' -> pure Sub
         '*' -> pure Mul
-        '/' -> pure Div
+   
 
 parseT :: Parser (Expr Bool)
 parseT = string "T" *> pure T

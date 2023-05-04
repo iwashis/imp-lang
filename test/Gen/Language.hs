@@ -16,7 +16,7 @@ genArithmeticExpr =
         , Op2 <$> genOp <*> genArithmeticExpr <*> genArithmeticExpr -- generate an arithmetic operation expression with two sub-expressions
         ]
   where
-    genOp = elements [Add, Sub, Mul, Div]
+    genOp = elements [Add, Mul]
 
 -- Define a generator for Boolean expressions
 genBoolExpr :: Gen (Expr Bool)

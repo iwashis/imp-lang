@@ -4,21 +4,14 @@ module Semantics.SmallStep where
 
 import Data.Map as Map
 import Language
+import Semantics.Store
+
 
 -- Semantics
 -- The purpose of this module is to define
 -- small step semantics for our language Expr a.
 
-type VariableName = String
-type Value = Int
 
--- First we define Store which can be thought of as
--- memory of stored values under variables that are
--- used in the languages.
-type Store = Map VariableName Value
-
-emptyStore :: Store
-emptyStore = empty
 
 -- in order to handle Store values we simply use standard Map datatype
 -- interface.

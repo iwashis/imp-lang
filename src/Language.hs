@@ -4,14 +4,15 @@
 
 module Language (Expr (..), BinOp (..), Arithmetic (..), Comm (..), SomeExpr (..), testExpr) where
 
-data BinOp = Add | Sub | Mul | Div deriving (Eq)
+data BinOp = Add | Mul deriving (Eq)
+
+
 
 instance Show BinOp where
     show :: BinOp -> String
     show Add = "+"
     show Mul = "*"
-    show Div = "/"
-    show Sub = "-"
+
 
 data Arithmetic = Arithmetic
     deriving (Eq, Show)
