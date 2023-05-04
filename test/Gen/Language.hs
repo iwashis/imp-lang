@@ -1,13 +1,11 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeOperators #-}
 
 module Gen.Language where
 
 import Language
 
 import Test.QuickCheck
-import Data.Typeable hiding (TypeRep)
 
 instance Arbitrary BinOp where
   arbitrary = elements [Add, Sub, Mul, Div]
