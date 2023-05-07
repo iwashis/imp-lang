@@ -1,6 +1,8 @@
 module Main where
 
 import Gen.Language
+import SemanticsProp
+import Test.QuickCheck
 
 main :: IO ()
-main = putStrLn "We have a main, but it does not work"
+main = pure () -- quickCheck prop_transitivity_store

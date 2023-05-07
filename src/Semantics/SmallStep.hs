@@ -7,7 +7,6 @@ module Semantics.SmallStep where
 import Data.Map as Map
 import Language
 import Semantics.Store
-import Data.Typeable
 
 -- Small-step Semantics
 -- The purpose of this module is to define

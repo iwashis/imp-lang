@@ -37,3 +37,5 @@ genCommExpr =
         , IfElse <$> genBoolExpr <*> genCommExpr <*> genCommExpr -- generate an if-else expression with a boolean expression and two sub-expressions
         , While <$> genBoolExpr <*> genCommExpr -- generate a while loop expression with a boolean expression and a sub-expression
         ]
+
+--instance Arbitrary (Expr a) where
