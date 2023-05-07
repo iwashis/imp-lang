@@ -1,6 +1,5 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeApplications #-}
 
 module Semantics.SmallStep where
 
@@ -73,5 +72,12 @@ trace (e, s) = case step (e, s) of
     Nothing -> [(e, s)]
     Just (e', s') -> (e, s) : trace (e', s')
 
--- TODO list :
--- 2. write big-step semantics and compare the two approaches
+
+value :: ( Expr a , Store ) -> Maybe ( Expr a, Store )
+value = lastMaybe . trace
+    where
+        lastMaybe :: [a] -> Maybe a
+        lastMaybe [] = Nothing
+        lastMaybe (x:xs) = case xs of
+            [] -> Just x
+            _  -> lastMaybe xs

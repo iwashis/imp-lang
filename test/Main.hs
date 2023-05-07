@@ -6,4 +6,4 @@ import Test.QuickCheck
 import Language
 
 main :: IO ()
-main = quickCheck transitivitySome
+main = quickCheck transitivity

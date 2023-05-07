@@ -9,15 +9,18 @@ import Semantics.SmallStep as SS
 import Language
 import Semantics.Store 
 
-transitivity :: (Eq a) => Expr a -> Store -> Bool
-transitivity e s = 
-    let maybeV  = BS.bigStep (e, s)
-        maybeV' = do 
-            (e',s') <- SS.step (e, s) 
-            BS.bigStep (e',s')
-    in maybeV == maybeV'
+bigEqSmall :: (Eq a) => Expr a -> Store -> Bool
+bigEqSmall e s = 
+    let n = 100 
+        maybeV  = BS.bigStep (e, s) n
+        maybeV' = case SS.step (e, s) of
+            Nothing -> Just (e,s) 
+            Just (e',s') -> Just (e',s')
+    in maybeV == do 
+        (e',s') <- maybeV'
+        BS.bigStep (e', s') (n-1)
 
-transitivitySome :: SomeExpr -> Store -> Bool
-transitivitySome (SomeInt e) = transitivity e
-transitivitySome (SomeBool e) = transitivity e
-transitivitySome (SomeComm e) = transitivity e
+transitivity :: SomeExpr -> Store -> Bool
+transitivity (SomeInt e)  = bigEqSmall e
+transitivity (SomeBool e) = bigEqSmall e
+transitivity (SomeComm e) = bigEqSmall e
