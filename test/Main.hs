@@ -3,6 +3,7 @@ module Main where
 import Gen.Language
 import SemanticsProp
 import Test.QuickCheck
+import Language
 
 main :: IO ()
-main = pure () -- quickCheck prop_transitivity_store
+main = quickCheck transitivitySome
