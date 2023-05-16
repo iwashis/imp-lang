@@ -1,14 +1,14 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wno-missing-export-lists #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
-module Gen.Language where
+module Gen.Language (SomeExpr (..)) where
 
-import Data.Typeable
 import Language
 import Semantics.Store
 import Test.QuickCheck
-import Test.QuickCheck.Gen
 
 -- Define a generator for Int expressions
 genIntExpr :: Gen (Expr Int)

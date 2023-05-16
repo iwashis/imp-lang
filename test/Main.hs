@@ -1,7 +1,6 @@
-module Main where
+module Main (main) where
 
-import Gen.Language
-import Language
+import Gen.Language ()
 import SemanticsProp
 import Test.QuickCheck
 

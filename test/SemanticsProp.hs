@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module SemanticsProp where
+module SemanticsProp (transitivity) where
 
 import Semantics.BigStep as BS
 import Semantics.SmallStep as SS

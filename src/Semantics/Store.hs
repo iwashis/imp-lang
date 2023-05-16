@@ -1,4 +1,4 @@
-module Semantics.Store where
+module Semantics.Store(emptyStore, VariableName, Value, Store) where
 
 import Data.Map
 

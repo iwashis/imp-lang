@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Semantics.SmallStep where
+module Semantics.SmallStep (step, trace, value) where
 
 import Data.Map as Map
 import Language
