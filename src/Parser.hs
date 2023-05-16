@@ -79,7 +79,6 @@ parseBinOp = do
     case op of
         '+' -> pure Add
         '*' -> pure Mul
-   
 
 parseT :: Parser (Expr Bool)
 parseT = string "T" *> pure T

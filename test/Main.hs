@@ -1,9 +1,9 @@
 module Main where
 
 import Gen.Language
+import Language
 import SemanticsProp
 import Test.QuickCheck
-import Language
 
 main :: IO ()
 main = quickCheck transitivity

@@ -1,13 +1,14 @@
-{-# LANGUAGE GADTs, FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Gen.Language where
 
+import Data.Typeable
 import Language
 import Semantics.Store
 import Test.QuickCheck
 import Test.QuickCheck.Gen
-import Data.Typeable
 
 -- Define a generator for Int expressions
 genIntExpr :: Gen (Expr Int)
@@ -40,11 +41,10 @@ genCommExpr =
         , While <$> genBoolExpr <*> genCommExpr -- generate a while loop expression with a boolean expression and a sub-expression
         ]
 
-
 instance Arbitrary SomeExpr where
     arbitrary = do
-        x <- oneof $ pure <$> [ "int", "bool", "store" ]
-        case x of 
+        x <- oneof $ pure <$> ["int", "bool", "store"]
+        case x of
             "int" -> some <$> genIntExpr
             "bool" -> some <$> genBoolExpr
             _ -> some <$> genCommExpr
