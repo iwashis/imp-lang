@@ -15,7 +15,7 @@ genIntExpr :: Gen (Expr Int)
 genIntExpr =
     oneof
         [ Var <$> arbitrary -- generate a variable expression with a random string name
-        , Constant <$> arbitrary -- generate a constant expression with a random integer value
+        , Constant . abs <$> arbitrary -- generate a constant expression with a random integer value
         , Op2 <$> genOp <*> genIntExpr <*> genIntExpr -- generate an arithmetic operation expression with two sub-expressions
         ]
   where

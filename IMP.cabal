@@ -61,6 +61,7 @@ test-suite IMP-test
   main-is: Main.hs
   other-modules:
       Gen.Language
+      ParserProp
       SemanticsProp
       Paths_IMP
   hs-source-dirs:
