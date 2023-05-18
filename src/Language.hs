@@ -77,7 +77,7 @@ data SomeExpr where
     SomeInt :: Expr Int -> SomeExpr
     SomeBool :: Expr Bool -> SomeExpr
     SomeComm :: Expr Store -> SomeExpr
-    deriving Eq
+    deriving (Eq)
 
 instance Show SomeExpr where
     show :: SomeExpr -> String

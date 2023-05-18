@@ -80,16 +80,10 @@ parseBinOp = do
         _ -> fail "unsupported operation type"
 
 parseT :: Parser (Expr Bool)
--- tak te mozna ale wywala warning
--- parseT = string "T" *> pure T
-parseT = do
-    _ <- string "T"
-    pure T
+parseT = string "T" >> pure T
 
 parseF :: Parser (Expr Bool)
-parseF = do
-    _ <- string "F"
-    pure F
+parseF = string "F" >> pure F
 
 parseLessOrEq :: Parser (Expr Bool)
 parseLessOrEq = do
@@ -108,14 +102,14 @@ parseSkip = do
 parseAssign :: Parser (Expr Store)
 parseAssign = do
     v <- many1 letter
-    _ <- spaces *> string ":=" <* spaces
+    spaces *> string ":=" *> spaces
     Assign v <$> parseIntExpr
 
 parseAndThen :: Parser (Expr Store)
 parseAndThen = do
     _ <- char '('
     e1 <- parseCommExpr
-    _ <- spaces *> char ';' <* spaces
+    spaces *> char ';' *> spaces
     e2 <- parseCommExpr
     _ <- char ')'
     pure $ AndThen e1 e2
@@ -126,9 +120,9 @@ parseIfElse = do
     spaces
     _ <- string "If"
     b <- parseBoolExpr
-    _ <- spaces *> string "Then" <* spaces
+    spaces *> string "Then" *> spaces
     e1 <- parseCommExpr
-    _ <- spaces *> string "Else" <* spaces
+    spaces *> string "Else" *> spaces
     e2 <- parseCommExpr
     spaces
     _ <- char ')'
@@ -140,7 +134,7 @@ parseWhile = do
     _ <- string "While"
     spaces
     b <- parseBoolExpr
-    _ <- spaces *> string "Do" <* spaces
+    spaces *> string "Do" *> spaces
     While b <$> parseCommExpr
 
 parseExpr :: Parser a -> String -> Either ParseError a
