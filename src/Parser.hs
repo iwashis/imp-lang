@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module Parser (someExprParser, parseExpr, parseBinOp, Parser) where
+module Parser where
 
 import Control.Applicative ((<|>))
 import Language
@@ -95,9 +95,7 @@ parseLessOrEq = do
     pure $ LessOrEq e1 e2
 
 parseSkip :: Parser (Expr Store)
-parseSkip = do
-    _ <- string "Skip"
-    pure Skip
+parseSkip = string "Skip" >> pure Skip
 
 parseAssign :: Parser (Expr Store)
 parseAssign = do
