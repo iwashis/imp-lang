@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module Parser (someExprParser, parseExpr) where
+module Parser (someExprParser, parseExpr, parseBinOp, Parser) where
 
 import Control.Applicative ((<|>))
 import Language
@@ -72,13 +72,12 @@ parseOp2 = do
 parseBinOp :: Parser BinOp
 parseBinOp = do
     spaces
-    op <- choice [char '+', char '-', char '*', char '/']
+    op <- choice [char '+', char '*']
     spaces
     case op of
         '+' -> pure Add
         '*' -> pure Mul
-
--- TODO(dla Sabiny): zrobić test do tego
+        _ -> fail "unsupported operation type"
 
 parseT :: Parser (Expr Bool)
 -- tak te mozna ale wywala warning
