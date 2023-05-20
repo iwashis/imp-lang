@@ -16,6 +16,10 @@ main = hspec $ do
             property transitivity
         it "parse.show = id" $
             property roundTrip
+        it "constRoundTrip?" $ -- popracować nad nazwą
+            property constRoundTrip 
+        it "varRoundTrip ?" $ -- popracować nad nazwą
+            property varRoundTrip 
         describe "parser only + and *" $ do
             it "+" $ do
                 parseExpr parseBinOp "+" `shouldBe` Right Add
@@ -25,6 +29,15 @@ main = hspec $ do
                 parseBinOp `shouldFailOn` "-"
             it "/" $ do
                 parseBinOp `shouldFailOn` "/"
+        describe "skip?" $ do -- popracować nad nazwą
+            it "Skip" $ do
+                parseExpr parseSkip "Skip" `shouldBe` Right Skip
+        describe "parseT?" $ do -- popracować nad nazwą
+            it "T" $ do 
+                parseExpr parseT "T" `shouldBe` Right T
+        describe "parseF?" $ do -- popracować nad nazwą
+            it "F" $ do 
+                parseExpr parseF "F" `shouldBe` Right F
 
 shouldFailOn ::
     (HasCallStack, Show a) =>

@@ -6,8 +6,13 @@ import Language
 import Semantics.Store
 import Test.QuickCheck
 
+newtype LowercaseString = LowercaseString String
+
 genLowercase :: Gen [Char]
 genLowercase = listOf1 $ elements ['a'..'z']
+
+genLowercaseString :: Gen LowercaseString
+genLowercaseString = LowercaseString <$> genLowercase
 
 -- Define a generator for Int expressions
 genIntExpr :: Gen (Expr Int)
