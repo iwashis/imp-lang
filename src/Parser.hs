@@ -80,7 +80,6 @@ parseBinOp = do
         '+' -> pure Add
         '*' -> pure Mul
    
-
 parseT :: Parser (Expr Bool)
 parseT = string "T" *> pure T
 
@@ -101,9 +100,11 @@ parseSkip = string "Skip" *> pure Skip
 
 parseAssign :: Parser (Expr Store)
 parseAssign = do
-    v <- many1 letter
+    char '('
+    v <- many1 letter -- parseVar? 
     spaces *> string ":=" <* spaces
     e <- parseIntExpr
+    char ')'
     pure $ Assign v e
 
 parseAndThen :: Parser (Expr Store)
@@ -131,7 +132,7 @@ parseIfElse = do
 
 parseWhile :: Parser (Expr Store)
 parseWhile = do
-    -- char '('
+    char '('
     spaces
     string "While"
     spaces
@@ -139,7 +140,7 @@ parseWhile = do
     spaces *> string "Do" <* spaces
     -- char '('
     e <- parseCommExpr
-    -- char ')'
+    char ')'
     pure $ While b e
 
 parseExpr :: Parser a -> String -> Either ParseError a
@@ -147,7 +148,7 @@ parseExpr p = parse p ""
 
 -- TODO: move unit tests to future test suite
 testInput :: String
-testInput = "While (x <= 2) Do Skip"
+testInput = "(While (x <= 2) Do Skip)"
 
 -- TODO: something is wrong with the testInput and is not parsed correctly
 testExpr :: Either ParseError SomeExpr

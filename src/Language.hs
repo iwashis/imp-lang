@@ -44,7 +44,7 @@ instance Show (Expr a) where
     show F = "F"
     show (LessOrEq e1 e2) = "(" ++ show e1 ++ " <= " ++ show e2 ++ ")"
     show Skip = "Skip"
-    show (Assign v e) = v ++ " := " ++ show e
+    show (Assign v e) = "(" ++ v ++ " := " ++ show e ++ ")"
     show (AndThen e1 e2) = "(" ++ show e1 ++ "; " ++ show e2 ++ ")"
     show (IfElse b e1 e2) =
         "("
