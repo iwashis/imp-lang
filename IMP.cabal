@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.0.
+-- This file has been generated from package.yaml by hpack version 0.35.1.
 --
 -- see: https://github.com/sol/hpack
 
@@ -35,7 +35,8 @@ library
       src
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
-      QuickCheck
+      HUnit
+    , QuickCheck
     , base >=4.7 && <5
     , containers
     , parsec
@@ -49,7 +50,8 @@ executable IMP-exe
       app
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      IMP
+      HUnit
+    , IMP
     , QuickCheck
     , base >=4.7 && <5
     , containers
@@ -61,13 +63,15 @@ test-suite IMP-test
   main-is: Main.hs
   other-modules:
       Gen.Language
+      ParserTest
       SemanticsProp
       Paths_IMP
   hs-source-dirs:
       test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      IMP
+      HUnit
+    , IMP
     , QuickCheck
     , base >=4.7 && <5
     , containers
