@@ -14,12 +14,13 @@ main = hspec $ do
     describe "IMP parser" $ do
         it "small step semantic" $
             property transitivity
-        it "parse.show = id" $
-            property roundTrip
-        it "constRoundTrip?" $ -- popracować nad nazwą
-            property constRoundTrip 
-        it "varRoundTrip ?" $ -- popracować nad nazwą
-            property varRoundTrip 
+        describe "parse.show = id" $ do
+            it "Expr" $
+                property roundTrip
+            it "Int" $
+                property constRoundTrip 
+            it "LowercaseString" $
+                property varRoundTrip 
         describe "parser only + and *" $ do
             it "+" $ do
                 parseExpr parseBinOp "+" `shouldBe` Right Add
