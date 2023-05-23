@@ -18,7 +18,7 @@ toExpr False = F
 
 -- small-step semantics for Expr a
 step :: (Expr a, Store) -> Maybe (Expr a, Store)
-step (Constant _, _) = Nothing
+step (Constant x, s) = Just (Constant x, s)
 step (Var x, s) = do
     n <- Map.lookup x s
     pure (Constant n, s)
@@ -30,8 +30,8 @@ step (Op2 o e1 e2, s) = case (e1, e2) of
     _ -> do
         (e1', _) <- step (e1, s)
         pure (Op2 o e1' e2, s)
-step (T, _) = Nothing
-step (F, _) = Nothing
+step (T, s) = Just (T, s)
+step (F, s) = Just (F, s)
 step (LessOrEq e1 e2, s) = case (e1, e2) of
     (Constant m, Constant n) -> pure (toExpr (m <= n), s)
     (Constant m, _) -> do
