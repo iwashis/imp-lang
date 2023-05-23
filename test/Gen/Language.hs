@@ -1,12 +1,12 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 
-module Gen.Language (SomeExpr (..)) where
+module Gen.Language where
 
 import Language
 import Semantics.Store
 import Test.QuickCheck
 
-newtype LowercaseString = LowercaseString String
+newtype LowercaseString = LowercaseString String deriving (Show)
 
 genLowercase :: Gen [Char]
 genLowercase = listOf1 $ elements ['a'..'z']
@@ -52,3 +52,6 @@ instance Arbitrary SomeExpr where
         , some <$> genBoolExpr
         , some <$> genCommExpr
         ]
+
+instance Arbitrary LowercaseString where
+    arbitrary = genLowercaseString

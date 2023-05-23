@@ -15,6 +15,6 @@ constRoundTrip x = Right (Constant $ abs x) == y
         y = parseExpr parseConstant (show $ abs x)
 
 varRoundTrip :: LowercaseString -> Bool
-varRoundTrip x = Right x == y
+varRoundTrip (LowercaseString x) = Right (Var x) == y
     where 
-        y = parseExpr parseVar (show x)
+        y = parseExpr parseVar x
