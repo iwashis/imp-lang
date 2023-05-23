@@ -71,9 +71,7 @@ parseOp2 = do
 
 parseBinOp :: Parser BinOp
 parseBinOp = do
-    spaces
     op <- choice [char '+', char '*']
-    spaces
     case op of
         '+' -> pure Add
         '*' -> pure Mul
@@ -89,7 +87,7 @@ parseLessOrEq :: Parser (Expr Bool)
 parseLessOrEq = do
     _ <- char '('
     e1 <- parseIntExpr
-    spaces *> string "<=" *> spaces
+    _ <- string "<="
     e2 <- parseIntExpr
     _ <- char ')'
     pure $ LessOrEq e1 e2
@@ -99,15 +97,19 @@ parseSkip = string "Skip" >> pure Skip
 
 parseAssign :: Parser (Expr Store)
 parseAssign = do
+    _ <- char '('
     v <- many1 letter
-    spaces *> string ":=" *> spaces
-    Assign v <$> parseIntExpr
+    spaces
+    _ <- string ":="
+    i <- parseIntExpr
+    _ <- char ')'
+    pure $ Assign v i
 
 parseAndThen :: Parser (Expr Store)
 parseAndThen = do
     _ <- char '('
     e1 <- parseCommExpr
-    spaces *> char ';' *> spaces
+    _ <- char ';'
     e2 <- parseCommExpr
     _ <- char ')'
     pure $ AndThen e1 e2
@@ -118,22 +120,23 @@ parseIfElse = do
     spaces
     _ <- string "If"
     b <- parseBoolExpr
-    spaces *> string "Then" *> spaces
+    _ <- string "Then"
     e1 <- parseCommExpr
-    spaces *> string "Else" *> spaces
+    _ <- string "Else"
     e2 <- parseCommExpr
-    spaces
     _ <- char ')'
     pure $ IfElse b e1 e2
 
 parseWhile :: Parser (Expr Store)
 parseWhile = do
+    _ <- char '('
     spaces
     _ <- string "While"
-    spaces
     b <- parseBoolExpr
-    spaces *> string "Do" *> spaces
-    While b <$> parseCommExpr
+    _ <- string "Do"
+    c <- parseCommExpr
+    _ <- char ')'
+    pure $ While b c
 
 parseExpr :: Parser a -> String -> Either ParseError a
 parseExpr p = parse p ""
