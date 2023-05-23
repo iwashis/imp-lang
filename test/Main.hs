@@ -30,13 +30,11 @@ main = hspec $ do
                 parseBinOp `shouldFailOn` "-"
             it "/" $ do
                 parseBinOp `shouldFailOn` "/"
-        describe "skip?" $ do -- popracować nad nazwą
+        describe "Constants parse correctly " $ do
             it "Skip" $ do
                 parseExpr parseSkip "Skip" `shouldBe` Right Skip
-        describe "parseT?" $ do -- popracować nad nazwą
             it "T" $ do 
                 parseExpr parseT "T" `shouldBe` Right T
-        describe "parseF?" $ do -- popracować nad nazwą
             it "F" $ do 
                 parseExpr parseF "F" `shouldBe` Right F
 
