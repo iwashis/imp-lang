@@ -23,7 +23,7 @@ step (Var x, s) = do
     n <- Map.lookup x s
     pure (Constant n, s)
 step (Op2 o e1 e2, s) = case (e1, e2) of
-    (Constant m, Constant n) -> pure (Constant (m + n), s)
+    (Constant m, Constant n) -> pure (Constant (toFunction o m n), s)
     (Constant _, _) -> do
         (e2', _) <- step (e2, s)
         pure (Op2 o e1 e2', s)

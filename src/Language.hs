@@ -2,11 +2,15 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Language (Expr (..), BinOp (..), SomeExpr (..), some, unSome, testExpr) where
+module Language (Expr (..), BinOp (..), SomeExpr (..), some, unSome, testExpr, toFunction) where
 
 import Semantics.Store (Store)
 
 data BinOp = Add | Mul deriving (Eq)
+
+toFunction :: BinOp -> (Int -> Int -> Int)
+toFunction Add = (+)
+toFunction Mul = (*)
 
 instance Show BinOp where
     show :: BinOp -> String

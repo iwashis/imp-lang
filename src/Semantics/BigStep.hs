@@ -1,14 +1,10 @@
 {-# LANGUAGE GADTs #-}
 
-module Semantics.BigStep (toFunction, bigStep) where
+module Semantics.BigStep (bigStep) where
 
 import Data.Map as Map
 import Language
 import Semantics.Store
-
-toFunction :: BinOp -> (Int -> Int -> Int)
-toFunction Add = (+)
-toFunction Mul = (*)
 
 -- bigstep semantics with a boundary condition given by number n
 bigStep :: (Expr a, Store) -> Int -> Maybe a
