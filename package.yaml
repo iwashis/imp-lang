@@ -31,7 +31,6 @@ ghc-options:
 - -Widentities
 - -Wincomplete-record-updates
 - -Wincomplete-uni-patterns
-- -Wmissing-export-lists
 - -Wmissing-home-modules
 - -Wpartial-fields
 - -Wredundant-constraints
@@ -60,3 +59,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - IMP
+    - hspec

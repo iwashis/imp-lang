@@ -1,7 +1,6 @@
-module Semantics.Store where
+module Semantics.Store (emptyStore, VariableName, Value, Store) where
 
-
-import Data.Map 
+import Data.Map
 
 type VariableName = String
 type Value = Int

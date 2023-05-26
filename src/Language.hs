@@ -2,21 +2,20 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Language (Expr (..), BinOp (..), SomeExpr (..),some, unSome, testExpr) where
+module Language (Expr (..), BinOp (..), SomeExpr (..), some, unSome, testExpr, toFunction) where
 
 import Semantics.Store (Store)
 
-
 data BinOp = Add | Mul deriving (Eq)
 
-
+toFunction :: BinOp -> (Int -> Int -> Int)
+toFunction Add = (+)
+toFunction Mul = (*)
 
 instance Show BinOp where
     show :: BinOp -> String
     show Add = "+"
     show Mul = "*"
-
-
 
 data Expr a where
     Var :: String -> Expr Int -- basic
@@ -44,7 +43,7 @@ instance Show (Expr a) where
     show F = "F"
     show (LessOrEq e1 e2) = "(" ++ show e1 ++ " <= " ++ show e2 ++ ")"
     show Skip = "Skip"
-    show (Assign v e) = v ++ " := " ++ show e
+    show (Assign v e) = "(" ++ v ++ " := " ++ show e ++ ")"
     show (AndThen e1 e2) = "(" ++ show e1 ++ "; " ++ show e2 ++ ")"
     show (IfElse b e1 e2) =
         "("
@@ -82,6 +81,7 @@ data SomeExpr where
     SomeInt :: Expr Int -> SomeExpr
     SomeBool :: Expr Bool -> SomeExpr
     SomeComm :: Expr Store -> SomeExpr
+    deriving (Eq)
 
 instance Show SomeExpr where
     show :: SomeExpr -> String
@@ -92,17 +92,17 @@ instance Show SomeExpr where
 some :: Expr a -> SomeExpr
 some e@(Var _) = SomeInt e
 some e@(Constant _) = SomeInt e
-some e@(Op2 {}) = SomeInt e
+some e@(Op2{}) = SomeInt e
 some e@T = SomeBool e
 some e@F = SomeBool e
-some e@(LessOrEq {}) = SomeBool e
+some e@(LessOrEq{}) = SomeBool e
 some e@Skip = SomeComm e
-some e@(Assign {}) = SomeComm e
-some e@(AndThen {}) = SomeComm e
-some e@(IfElse {}) = SomeComm e
-some e@(While {}) = SomeComm e
+some e@(Assign{}) = SomeComm e
+some e@(AndThen{}) = SomeComm e
+some e@(IfElse{}) = SomeComm e
+some e@(While{}) = SomeComm e
 
 unSome :: (forall a. Expr a -> b) -> (SomeExpr -> b)
 unSome f (SomeInt e) = f e
-unSome f (SomeBool e) = f e 
+unSome f (SomeBool e) = f e
 unSome f (SomeComm e) = f e
